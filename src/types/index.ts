@@ -8,7 +8,7 @@ export interface User {
   type: UserType
 }
 
-export type OfferStatus = 'draft' | 'assigned' | 'cancelled' | 'completed'
+export type OfferStatus = 'draft' | 'assigned' | 'cancelled' | 'completed' | 'offered'
 
 export type FuelType = 'Gasoline' | 'Diesel' | 'Electric' | 'Hybrid' | 'Other'
 export type BodyType = 'Sedan' | 'SUV' | 'Truck' | 'Van' | 'Coupe' | 'Convertible' | 'Wagon' | 'Hatchback' | 'Other'
@@ -19,12 +19,13 @@ export type DrivetrainCondition = 'drives' | 'runs_but_does_not_drive' | 'does_n
 export type EngineTransmissionCondition = 'intact' | 'damaged' | 'missing'
 
 export interface Offer {
-  id: string
-  sellerId: string
+  offerId: number
+  sellerId: number
+  sellerNetworkId?: string
   sellerName?: string
-  buyerId?: string
+  buyerId?: number
   buyerName?: string
-  carrierId?: string
+  carrierId?: number
   carrierName?: string
   
   vin?: string
@@ -64,8 +65,12 @@ export interface Offer {
   airbagsDeployed: YesNo
   
   status: OfferStatus
+  purchaseId?: number | null
+  transportId?: number | null
+  noSQLIndexId?: string
   createdAt: string
-  updatedAt: string
+  lastModifiedAt?: string
+  updatedAt?: string
 }
 
 export interface Purchase {
@@ -146,7 +151,7 @@ export interface AutocompleteItem {
 }
 
 export interface CreateOfferRequest {
-  sellerId: string
+  sellerId: number
   vin?: string
   vehicleYear: string
   vehicleMake: string
@@ -188,9 +193,10 @@ export interface AssignOfferRequest {
 
 export interface OffersListResponse {
   offers: Offer[]
-  total: number
+  totalCount: number
   page: number
   pageSize: number
+  totalPages: number
 }
 
 export interface OffersListParams {

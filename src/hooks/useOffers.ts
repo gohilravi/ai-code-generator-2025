@@ -49,11 +49,11 @@ export function useAssignOffer() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: ({ offerId, data }: { offerId: string; data: AssignOfferRequest }) =>
-      offerService.assignOffer(offerId, data),
+    mutationFn: ({ offerId, data }: { offerId: number; data: AssignOfferRequest }) =>
+      offerService.assignOffer(offerId.toString(), data),
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: [OFFERS_QUERY_KEY] })
-      queryClient.invalidateQueries({ queryKey: [OFFERS_QUERY_KEY, variables.offerId] })
+      queryClient.invalidateQueries({ queryKey: [OFFERS_QUERY_KEY, variables.offerId.toString()] })
     },
   })
 }
@@ -62,10 +62,10 @@ export function useCancelOffer() {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: (offerId: string) => offerService.cancelOffer(offerId),
+    mutationFn: (offerId: number) => offerService.cancelOffer(offerId.toString()),
     onSuccess: (_, offerId) => {
       queryClient.invalidateQueries({ queryKey: [OFFERS_QUERY_KEY] })
-      queryClient.invalidateQueries({ queryKey: [OFFERS_QUERY_KEY, offerId] })
+      queryClient.invalidateQueries({ queryKey: [OFFERS_QUERY_KEY, offerId.toString()] })
     },
   })
 }

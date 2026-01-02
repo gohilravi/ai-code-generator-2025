@@ -109,9 +109,10 @@ export const offerService = {
       console.error('Get offers error:', error)
       return {
         offers: [],
-        total: 0,
+        totalCount: 0,
         page: params.pageNumber || 1,
         pageSize: params.pageSize || 20,
+        totalPages: 0,
       }
     }
   },
