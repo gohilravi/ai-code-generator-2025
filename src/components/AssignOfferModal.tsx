@@ -95,7 +95,7 @@ export function AssignOfferModal({
 
     try {
       await assignOfferMutation.mutateAsync({
-        offerId: offer.id,
+        offerId: offer.offerId,
         data: {
           buyer_id: parseInt(selectedBuyerId),
           carrier_id: parseInt(selectedCarrierId),
@@ -136,8 +136,8 @@ export function AssignOfferModal({
             Assign Offer
           </DialogTitle>
           <DialogDescription className="text-slate-600 font-medium">
-            Assign offer {offer.id} ({offer.vehicleYear} {offer.vehicleMake}{" "}
-            {offer.vehicleModel}) to buyer and carrier
+            Assign offer {offer.offerId} ({offer.vehicleYear}{" "}
+            {offer.vehicleMake} {offer.vehicleModel}) to buyer and carrier
           </DialogDescription>
         </DialogHeader>
 
