@@ -72,14 +72,14 @@ export function OffersTab({ userType, sellers }: OffersTabProps) {
 
   const canAssign = (offer: Offer): boolean => {
     return (
-      offer.status === "draft" &&
+      offer.status === "offered" &&
       (userType === "agent" || userType === "seller")
     );
   };
 
   const canCancel = (offer: Offer): boolean => {
     return (
-      (offer.status === "draft" || offer.status === "assigned") &&
+      (offer.status === "offered" || offer.status === "assigned") &&
       (userType === "agent" || userType === "seller")
     );
   };
@@ -89,7 +89,8 @@ export function OffersTab({ userType, sellers }: OffersTabProps) {
       OfferStatus,
       "default" | "secondary" | "destructive" | "outline"
     > = {
-      draft: "secondary",
+      draft: "outline",
+      offered: "secondary",
       assigned: "default",
       cancelled: "destructive",
       completed: "outline",
@@ -219,13 +220,13 @@ export function OffersTab({ userType, sellers }: OffersTabProps) {
                   <TableBody>
                     {offers.map((offer, index) => (
                       <TableRow
-                        key={offer.id}
+                        key={offer.offerId}
                         className={`hover:bg-blue-50/50 transition-colors ${
                           index % 2 === 0 ? "bg-white" : "bg-slate-50/30"
                         }`}
                       >
                         <TableCell className="font-semibold text-blue-600">
-                          {offer.id}
+                          {offer.offerId}
                         </TableCell>
                         <TableCell className="font-medium">
                           {offer.vehicleYear}

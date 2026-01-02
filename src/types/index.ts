@@ -151,7 +151,7 @@ export interface AutocompleteItem {
 }
 
 export interface CreateOfferRequest {
-  sellerId: number
+  sellerId: string
   vin?: string
   vehicleYear: string
   vehicleMake: string
@@ -193,6 +193,7 @@ export interface AssignOfferRequest {
 
 export interface OffersListResponse {
   offers: Offer[]
+  total: number // alias for totalCount for backwards compatibility
   totalCount: number
   page: number
   pageSize: number

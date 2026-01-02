@@ -104,11 +104,17 @@ export const offerService = {
       }
       
       const response = await api.get('/api/offers', { params: queryParams })
-      return response.data
+      const data = response.data;
+      // Ensure backwards compatibility by adding 'total' if it doesn't exist
+      if (data && typeof data.totalCount === 'number' && typeof data.total === 'undefined') {
+        data.total = data.totalCount;
+      }
+      return data
     } catch (error) {
       console.error('Get offers error:', error)
       return {
         offers: [],
+        total: 0,
         totalCount: 0,
         page: params.pageNumber || 1,
         pageSize: params.pageSize || 20,
@@ -129,7 +135,47 @@ export const offerService = {
 
   async createOffer(data: CreateOfferRequest): Promise<Offer | null> {
     try {
-      const response = await api.post('/api/offers', data)
+      // Convert sellerId to number - extract numeric part from string like "seller-2"
+      const match = data.sellerId.match(/-?(\d+)$/);
+      const sellerId = match ? parseInt(match[1]) : 0;
+      
+      const payload = {
+        sellerId,
+        vin: data.vin || "",
+        vehicleYear: data.vehicleYear,
+        vehicleMake: data.vehicleMake,
+        vehicleModel: data.vehicleModel,
+        vehicleTrim: data.vehicleTrim,
+        vehicleBodyType: data.vehicleBodyType,
+        vehicleCabType: data.vehicleCabType,
+        vehicleDoorCount: data.vehicleDoorCount,
+        vehicleFuelType: data.vehicleFuelType,
+        vehicleBodyStyle: data.vehicleBodyStyle,
+        vehicleUsage: data.vehicleUsage,
+        vehicleZipCode: data.vehicleZipCode,
+        ownershipType: data.ownershipType,
+        ownershipTitleType: data.ownershipTitleType,
+        mileage: data.mileage,
+        isMileageUnverifiable: data.isMileageUnverifiable,
+        drivetrainCondition: data.drivetrainCondition,
+        keyOrFobAvailable: data.keyOrFobAvailable,
+        workingBatteryInstalled: data.workingBatteryInstalled,
+        allTiresInflated: data.allTiresInflated,
+        wheelsRemoved: data.wheelsRemoved,
+        wheelsRemovedDriverFront: data.wheelsRemovedDriverFront,
+        wheelsRemovedDriverRear: data.wheelsRemovedDriverRear,
+        wheelsRemovedPassengerFront: data.wheelsRemovedPassengerFront,
+        wheelsRemovedPassengerRear: data.wheelsRemovedPassengerRear,
+        bodyPanelsIntact: data.bodyPanelsIntact,
+        bodyDamageFree: data.bodyDamageFree,
+        mirrorsLightsGlassIntact: data.mirrorsLightsGlassIntact,
+        interiorIntact: data.interiorIntact,
+        floodFireDamageFree: data.floodFireDamageFree,
+        engineTransmissionCondition: data.engineTransmissionCondition,
+        airbagsDeployed: data.airbagsDeployed
+      };
+      
+      const response = await api.post('/api/offers', payload)
       return response.data
     } catch (error) {
       console.error('Create offer error:', error)
